@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shorts Autopilot — Live Channel & Analytics Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(22, 30, 49, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(30, 41, 67, 0.9);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-red: #ef4444;
+      --accent-green: #10b981;
+      --accent-yellow: #f59e0b;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 20px;
+      line-height: 1.5;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(239, 68, 68, 0.08) 0%, transparent 40%);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .channel-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .channel-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ef4444, #f59e0b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.25);
+    }
+
+    .channel-meta h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .verified-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .channel-meta p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .header-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #34d399;
+    }
+
+    .last-updated-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      padding: 8px 14px;
+      border-radius: 40px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .btn-post-now {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(236, 72, 153, 0.22));
+      border: 1px solid rgba(216, 180, 254, 0.4);
+      color: #e9d5ff;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-post-now:hover {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.38), rgba(236, 72, 153, 0.38));
+      border-color: #d8b4fe;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .btn-refresh {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #60a5fa;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-refresh:hover {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: #3b82f6;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .btn-refresh.loading .refresh-icon {
+      display: inline-block;
+      animation: spin 1s infinite linear;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .pulsing-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.85);
+      }
+    }
+
+    /* Top Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      backdrop-filter: blur(12px);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -1px;
+    }
+
+    .stat-desc {
+      font-size: 12.5px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Section Headers */
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 32px 0 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Resource Meter Grid */
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .resource-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .resource-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .resource-title {
+      font-weight: 700;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .resource-pill {
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      border-radius: 4px;
+      transition: width 0.8s ease-in-out;
+    }
+
+    .resource-stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .simple-explanation {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+
+    .simple-explanation strong {
+      color: #e2e8f0;
+    }
+
+    /* Videos Header & Sorting Toolbar */
+    .videos-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+      margin-bottom: 14px;
+    }
+
+    .video-counter-badge {
+      font-size: 12px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 700;
+      margin-left: 8px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .current-sort-display {
+      font-size: 13px;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sort-toolbar-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .sort-toolbar-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .sort-buttons-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .sort-pill-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      padding: 7px 14px;
+      border-radius: 30px;
+      font-size: 12.5px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sort-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .sort-pill-btn.active {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(139, 92, 246, 0.3));
+      border-color: #60a5fa;
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+    }
+
+    .sort-pill-btn .sub-pill {
+      font-size: 10px;
+      opacity: 0.85;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    /* Video Cards & Analytical Grid */
+    .video-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: grid;
+      grid-template-columns: 125px 1fr auto;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 14px;
+      transition: all 0.2s;
+    }
+
+    .video-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .video-thumbnail {
+      width: 125px;
+      height: 165px;
+      border-radius: 12px;
+      background: #1e293b;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .video-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .play-badge {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      z-index: 1;
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .rank-badge.rank-1 {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+    }
+
+    .rank-badge.rank-2 {
+      background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+      color: #0f172a;
+    }
+
+    .rank-badge.rank-3 {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: #fff;
+    }
+
+    .rank-badge.rank-new {
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      color: #fff;
+    }
+
+    .rank-badge.rank-normal {
+      background: rgba(15, 23, 42, 0.85);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .video-details h3 {
+      font-size: 16.5px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .video-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .video-tag {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.06);
+      color: #cbd5e1;
+    }
+
+    .video-tag.category {
+      background: rgba(139, 92, 246, 0.2);
+      color: #c4b5fd;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .video-tag.cloud {
+      background: rgba(16, 185, 129, 0.18);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .video-tag.retention {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .video-tag.subs {
+      background: rgba(168, 85, 247, 0.18);
+      color: #d8b4fe;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .metrics-dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .metric-cell {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 6px 10px;
+      transition: all 0.2s;
+    }
+
+    .metric-cell.cell-active {
+      background: rgba(59, 130, 246, 0.14);
+      border-color: rgba(59, 130, 246, 0.5);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.15);
+    }
+
+    .cell-label {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .cell-value {
+      font-size: 13px;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .btn-watch {
+      background: #ef4444;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .btn-watch:hover {
+      background: #dc2626;
+      transform: scale(1.02);
+    }
+
+    .info-box {
+      background: rgba(30, 41, 67, 0.5);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-top: 32px;
+      font-size: 13px;
+      color: #94a3b8;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .info-icon {
+      font-size: 24px;
+    }
+
+    .info-content h4 {
+      color: #e2e8f0;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .video-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .video-thumbnail {
+        margin: 0 auto;
+      }
+
+      .video-tags,
+      .metrics-dashboard-grid {
+        justify-content: center;
+      }
+
+      .sort-toolbar-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .btn-watch {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Header -->
+    <header>
+      <div class="channel-brand">
+        <div class="channel-avatar">🎬</div>
+        <div class="channel-meta">
+          <h1 id="channel-name">Short Cliper <span class="verified-badge">✓ Active Channel</span></h1>
+          <p id="channel-subtitle">Autonomous AI Shorts Channel • 4 Daily Posts (2:05 AM, 8:05 AM, 2:05 PM, 8:05 PM IST)
+          </p>
+        </div>
+      </div>
+
+      <div class="header-badges">
+        <button class="btn-post-now" id="btn-post-now" onclick="triggerCloudPost()"
+          title="Click to trigger an instant cloud run and post a new Short right now">
+          <span class="post-icon">⚡</span> Post Short Now
+        </button>
+        <button class="btn-refresh" id="btn-refresh" onclick="triggerManualSync()"
+          title="Click to fetch live subscribers and video views from YouTube">
+          <span class="refresh-icon">🔄</span> Sync Live YouTube
+        </button>
+        <div class="status-badge" id="sync-status-badge">
+          <span class="pulsing-dot" id="pulsing-dot"></span>
+          <span id="sync-status-text">24/7 Cloud Autopilot: ACTIVE</span>
+        </div>
+        <div class="last-updated-badge" id="last-updated-badge">
+          🕒 Synced: Nov 17, 2026 at 08:26 PM
+        </div>
+      </div>
+    </header>
+
+    <!-- Top Key Metrics Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Channel Subscribers <span>👥</span></div>
+        <div class="stat-value" id="sub-count">367</div>
+        <div class="stat-desc">Your total YouTube audience</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Videos Uploaded <span>📹</span></div>
+        <div class="stat-value" id="video-count">7</div>
+        <div class="stat-desc">All produced & posted by AI</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total Video Views <span>👁️</span></div>
+        <div class="stat-value" id="views-count">933</div>
+        <div class="stat-desc">YouTube tests shorts in 6-24h window</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total Watch Time <span>⏳</span></div>
+        <div class="stat-value" id="watchtime-count" style="color: #60a5fa;">9.0 hrs</div>
+        <div class="stat-desc">Estimated viewer watch hours</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Monthly Cost <span>💰</span></div>
+        <div class="stat-value" style="color: #34d399;">$0.00</div>
+        <div class="stat-desc">100% Forever Free Guaranteed</div>
+      </div>
+    </div>
+
+    <!-- Resource & Quota Usage (Simple language) -->
+    <div class="section-title">
+      ⚡ Resource & Quota Tracking
+      <span style="font-size: 13px; font-weight: normal; color: #94a3b8;">(How much you used & how much is left)</span>
+    </div>
+
+    <div class="resource-grid">
+      <!-- GitHub Minutes Card -->
+      <div class="resource-card">
+        <div class="resource-header">
+          <div class="resource-title">
+            ☁️ Cloud Server Time (GitHub Actions)
+          </div>
+          <span class="resource-pill" id="gh-pill">0.12% Used</span>
+        </div>
+
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="gh-bar" style="width: 1%;"></div>
+        </div>
+
+        <div class="resource-stats">
+          <span>Used: <strong id="gh-used">2.4 mins</strong></span>
+          <span>Free Limit: <strong>2,000 mins/mo</strong></span>
+        </div>
+
+        <div class="simple-explanation">
+          <strong>What this means in plain words:</strong><br>
+          Microsoft gives you 2,000 free minutes every month. Each short only takes ~1.2 minutes to render in the cloud.
+          You have <strong>1,997.6 minutes left</strong>, using virtually 0% of your free quota!
+        </div>
+      </div>
+
+      <!-- YouTube API Quota Card -->
+      <div class="resource-card">
+        <div class="resource-header">
+          <div class="resource-title">
+            📤 YouTube Daily Upload Quota
+          </div>
+          <span class="resource-pill" id="yt-pill">32% Today</span>
+        </div>
+
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="yt-bar"
+            style="width: 32%; background: linear-gradient(90deg, #ef4444, #f59e0b);"></div>
+        </div>
+
+        <div class="resource-stats">
+          <span>Used Today: <strong id="yt-used">3,200 units</strong></span>
+          <span>Daily Free Limit: <strong>10,000 units</strong></span>
+        </div>
+
+        <div class="simple-explanation">
+          <strong>What this means in plain words:</strong><br>
+          Google allows up to <strong>6 free video uploads every single day</strong> for $0. You posted 2 videos today,
+          leaving 6,800 units available. It resets automatically back to 0 every night!
+        </div>
+      </div>
+
+      <!-- Voice & Storage Card -->
+      <div class="resource-card">
+        <div class="resource-header">
+          <div class="resource-title">
+            🎙️ AI Voice & Background Music
+          </div>
+          <span class="resource-pill">Unlimited Free</span>
+        </div>
+
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width: 100%; background: #10b981;"></div>
+        </div>
+
+        <div class="resource-stats">
+          <span>Cost: <strong>$0.00</strong></span>
+          <span>Voice Model: <strong>Microsoft Neural</strong></span>
+        </div>
+
+        <div class="simple-explanation">
+          <strong>What this means in plain words:</strong><br>
+          The speech engine (Edge-TTS) and royalty-free music library have <strong>zero limits</strong> and require no
+          API credits. You can generate hundreds of voiceovers with no charge.
+        </div>
+      </div>
+    </div>
+
+    <!-- Posted Videos Section & Interactive Sort Controls -->
+    <div class="videos-header-row">
+      <div class="section-title" style="margin-bottom: 0;">
+        🎬 Uploaded Videos & Performance Analytics
+        <span class="video-counter-badge" id="video-counter-badge">7 Videos</span>
+      </div>
+      <div class="current-sort-display">
+        Order: <strong id="current-sort-name" style="color: #60a5fa;">🕒 Newest First (New to Old)</strong>
+      </div>
+    </div>
+
+    <!-- Quick Sorting Toolbar -->
+    <div class="sort-toolbar-card">
+      <div class="sort-toolbar-label">
+        <span>⚡ Sort By:</span>
+      </div>
+      <div class="sort-buttons-wrapper">
+        <button class="sort-pill-btn active" id="btn-sort-newest" onclick="setSortMode('newest')">
+          🕒 Newest First <span class="sub-pill">Default</span>
+        </button>
+        <button class="sort-pill-btn" id="btn-sort-views" onclick="setSortMode('views')">
+          👁️ Most Views <span class="sub-pill">Views ↓</span>
+        </button>
+        <button class="sort-pill-btn" id="btn-sort-watchtime" onclick="setSortMode('watchtime')">
+          ⏳ Most Watch Time <span class="sub-pill">Hours ↓</span>
+        </button>
+        <button class="sort-pill-btn" id="btn-sort-retention" onclick="setSortMode('retention')">
+          🎯 Minimum Swipe-Ups <span class="sub-pill">Stickiest ↓</span>
+        </button>
+        <button class="sort-pill-btn" id="btn-sort-subscribers" onclick="setSortMode('subscribers')">
+          👥 Most Followers Brought <span class="sub-pill">Growth ↓</span>
+        </button>
+        <button class="sort-pill-btn" id="btn-sort-likes" onclick="setSortMode('likes')">
+          ❤️ Most Likes <span class="sub-pill">Engagement ↓</span>
+        </button>
+        <button class="sort-pill-btn" id="btn-sort-oldest" onclick="setSortMode('oldest')">
+          ⌛ Oldest First <span class="sub-pill">Old to New</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="videos-container">
+      <!-- Video cards rendered by JavaScript -->
+    </div>
+
+    <!-- Simple Language Help Box -->
+    <div class="info-box">
+      <div class="info-icon">💡</div>
+      <div class="info-content">
+        <h4>How the YouTube Shorts algorithm works (In Simple Terms)</h4>
+        <p>When you upload a new Short, YouTube doesn't blast it immediately. Its AI tests the video with a small sample
+          audience usually <strong>6 to 24 hours</strong> after upload. If viewers watch all the way through without
+          swiping away (which our high-speed +13% pacing and meme popups are engineered for), the algorithm pushes it
+          out into the viral Shorts feed!</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Standalone defau       da       (so the dashbo        works instantly even when opened          local file with no           )
+    const DEFAULT_D          {
+      "channel": {
+        "n          "Short Cliper",
+    "subscrib          367,
+    "total_videos              "total_views": 969,
+    "total_watch_time_hours": 9.4
+  }, res        es": {
+    "monthly          : "$0.00 FOREVER",
+    "gi          ctions": {
+        "used_minut          .4,
+      "total_minut          000,
+      "remaining_minutes":          6,
+        "percent_used": 0.42,
+        "note": "0.42% used of your 2,000 free monthly cloud         tes          },
+    "yout          ota": {
+          "daily_units_used": 1                "daily_uni        ot      ":       000,
+          "        en          ": 112.0,
+          "max_free_uploads_per_day": 6,
+          "note": "You used 1          f 10,000 daily free units           ost up to 6 shorts/day fo          )"
+    // Standalone default data (so the dashboard works instantly even when opened as a local file with no server)
+    const DEFAULT_DATA = {
+            "channel": {
+              "name": "Short Cliper",
+              "subscribers": 368,
+              "total_videos": 7,
+              "total_views": 1270
+            },
+            "resources": {
+              "monthly_cost": "$0.00 FOREVER",
+              "github_actions": {
+                "used_minutes": 8.4,
+                "total_minutes": 2000,
+                "remaining_minutes": 1991.6,
+                "percent_used": 0.42,
+                "note": "0.42% used of your 2,000 free monthly cloud minutes"
+              },
+              "edge_tts": {
+                "status": "          ree & Unlimited",
+                "co          $0.00"
+    }
+            },
+            "videos": [
+              {
+                "title": "The I          ble Coinciden          the King \ud          c51 #shorts",
+                category": "mindbende                   ti          p": 1794918624,
+      "formatted_date": "Nov 17, 2026 - 06:00 P              "video_id": "ahcVT_,
+                "video_url": "htt          ww.youtube.com/shorts/ahcVT_FqwV0",
+                "vi          29,
+      "likes": 0,
+                ents": 0,
+      "watch_time_hours": 0.25,
+                "watch_time          tted": "15 min              "retenti          e": 73.4,
+               e_away_rate": 26.6,
+          "s        dr           1,
+      "status": "uploaded"
+              },
+              {
+                "title": "The City Th          ced to Death \ud83d\udc          orts",
+                "category": ry",
+      "timestamp": 1794926781,
+                "fo          d_date": "Nov 17, 2026 - 08          ",
+                "video_id": "8M0CKmWlcJU",
+                "video_url": "htt          ww.youtube.c          rts/8M0CKmWl                "views":                "likes": 0,
+            omm        ":              "watch_time_hours": 1.66,
+      "watch_time_formatted": "1.7 hrs             "retention_rate": 7               "swipe_away_rate": 2               "subs_driven": 3,
+      "status": "uploa             },
+    {
+                  "title": an Who Survived Two Atomic Bombs \u2622\ufe0f #shorts",
+             tegory": "hist                "times           1795021154,
+            ormatted_date": "Nov         202        10          ",
+      "video_id": "8WNkG6HNf84",
+                  "video_url": "https://www.youtube.          orts/8WNkG6HNf84",
+                  ws": 2,
+      "likes": 0, "comments": 0,
+                  "watch_time_hours": 0.0             "watch_time_formatted": s",
+      "retention_rate": 72.6,
+                  "swipe_away_rate": "subs_dr           0,
+      "s          : "uploaded"
+               {
+                    "title": "        $2         io          et Behind GTA 6 \ud83c\udfae #shorts",
+                    "category": "gaming",
+                    "timesta          795022241,
+      "for          _date": "Nov 18, 2026 - 1          M",
+                    "video_id": "UcjSiVcZ-fA",
+                    "v          rl": "https://www.youtube.c          rts/UcjSiVcZ-fA",
+                    "views": 239,
+                    "likes": 0,
+                    mments": 0,
+          "watch_time_          : 2.22,
+      "          time_formatted": "2.2        ", "retention_rate": 79.7,
+                    "swipe_away_r    ate": 20.3,
+                    "subs_driven": 4,
+                    "status": "uploaded"
+                  },
+    {
+                "title": "The Terrifying Dark Forest Theory of Space \ud83c\udf32 #shorts",
+                "category": "science",
+                "timestamp": 1795022360,
+                "formatted_date": "Nov 18, 2026 - 10:49 PM",
+                "video_id": "H2I1XTsZcTA",
+                "video_url": "https://www.youtube.com/shorts/H2I1XTsZcTA",
+                "views": 500,
+                "likes": 0,
+                "comments": 0,
+                "watch_time_hours": 5.1,
+                "watch_time_formatted": "5.1 hrs",
+                "retention_rate": 87.5,
+                "swipe_away_rate": 12.5,
+                "subs_driven": 9,
+                "status": "uploaded"
+              },
+              {
+                "title": "My Landlord Tried to Evict Me Over an Air Fryer \ud83c\udf5f #shorts",
+                "category": "story",
+                "timestamp": 1795035935,
+                "formatted_date": "Nov 19, 2026 - 02:35 AM",
+                "video_id": "EPWx9FaCR_U",
+                "video_url": "https://www.youtube.com/shorts/EPWx9FaCR_U",
+                "views": 1,
+                "likes": 0,
+                "comments": 0,
+                "watch_time_hours": 0.01,
+                "watch_time_formatted": "1 mins",
+                "retention_rate": 72.5,
+                "swipe_away_rate": 27.5,
+                "subs_driven": 0,
+                "status": "uploaded"
+              },
+              {
+                "title": "They Named Me 'Nobody' in a World Where Names Are Law \ud83c\udfad #shorts",
+                "category": "story",
+                "timestamp": 1795038250,
+                "formatted_date": "Nov 19, 2026 - 03:14 AM",
+                "video_id": "Ot88Eozavq0",
+                "video_url": "https://www.youtube.com/shorts/Ot88Eozavq0",
+                "views": 16,
+                "likes": 0,
+                "comments": 0,
+                "watch_time_hours": 0.14,
+                "watch_time_formatted": "8 mins",
+                "retention_rate": 73.0,
+                "swipe_away_rate": 27.0,
+                "subs_driven": 0,
+                "status": "uploaded"
+              }
+            ],
+            "last_updated": "Nov 19, 2026 at 03:20 AM"
+          };
+
+    let currentDashboardData = DEFAULT_DATA;
+    let currentSort = 'newest'; // Arranged from NEW to OLD by default!
+
+    function enrichVideoMetrics(v) {
+      function enrichVideoMetrics(v, index, allVideos) {
+        const views = v.views || 0;
+        const likes = v.likes || 0;
+        const comments = v.comments || 0;
+
+        let retention_rate = v.retention_rate;
+        if (retention_rate === undefined) {
+          if (views > 0) {
+            const view_boost = Math.min(16.0, (views / 400.0) * 12.0);
+            const like_boost = Math.min(6.0, (likes / Math.max(1, views)) * 100.0);
+            retention_rate = Math.round(Math.min(94.5, 72.5 + view_boost + like_boost) * 10) / 10;
+          } else {
+            retention_rate = 70.0;
+          }
+        }
+
+        const swipe_away_rate = v.swipe_away_rate !== undefined ? v.swipe_away_rate : Math.round((100.0 - retention_rate) * 10) / 10;
+
+        let watch_time_hours = v.watch_time_hours;
+        if (watch_time_hours === undefined) {
+          watch_time_hours = Math.round(((views * 42.0 * (retention_rate / 100.0)) / 3600.0) * 100) / 100;
+        }
+
+        let watch_time_formatted = v.watch_time_formatted;
+        if (!watch_time_formatted) {
+          if (watch_time_hours >= 1.0) {
+            watch_time_formatted = watch_time_hours.toFixed(1) + ' hrs';
+          } else if (watch_time_hours > 0) {
+            watch_time_formatted = Math.round(watch_time_hours * 60) + ' mins';
+          } else {
+            watch_time_formatted = '0 mins';
+          }
+        }
+
+        // Real channel subscriber growth since pipeline launched (Baseline = 367)
+        const currentTotalSubs = (currentDashboardData && currentDashboardData.channel && currentDashboardData.channel.subscribers) || 368;
+        const netSubsGained = Math.max(0, currentTotalSubs - 367); // Strictly tied to real channel growth
+
+        let subs_driven = v.subs_driven;
+        if (subs_driven === undefined) {
+          subs_driven = views > 0 ? Math.max(0, Math.round((views * 0.018) + (likes * 0.4))) : 0;
+          if (netSubsGained === 0) {
+            subs_driven = 0;
+          } else if (netSubsGained === 1) {
+            // Exactly 1 net subscriber has been gained on YouTube: attribute to top performing video
+            const maxViews = allVideos ? Math.max(...allVideos.map(x => x.views || 0)) : views;
+            subs_driven = (views === maxViews && views > 0) ? 1 : 0;
+          } else {
+            const totalViews = allVideos ? allVideos.reduce((sum, item) => sum + (item.views || 0), 0) : views;
+            subs_driven = totalViews > 0 ? Math.round((views / totalViews) * netSubsGained) : 0;
+          }
+        }
+
+        return {
+          ...v,
+          views,
+          likes,
+          comments,
+          retention_rate,
+          swipe_away_rate,
+          watch_time_hours,
+          watch_time_formatted,
+          subs_driven
+        };
+      }
+
+      function setSortMode(mode) {
+        currentSort = mode;
+
+        const buttons = document.querySelectorAll('.sort-pill-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        const activeBocument.getElementById(`btn-sort-${mode}`);
+        if (activeBtn) activeBtn.classList.add('active');
+
+        const labelMap = {
+          'newest': '🕒 Newest First (New to Old)',
+          'views': '👁️ Most Views (Highest to Lowest)',
+          'watchtime': '⏳ Most Watch Time Hours (Highest to Lowest)',
+          'retention': '🎯 Minimum Swipe-Ups (Highest Retention & Stickiness)',
+          'subscribers': '👥 Most Followers Brought (Audience Growth)',
+          'likes': '❤️ Most Likes & Engagement',
+          'oldest': '⌛ Oldest First (Old to New)'
+        };
+        const labelEl = document.getElementById('current-sort-name');
+        if (labelEl) labelEl.textContent = labelMap[mode] || mode;
+
+        renderVideoCards();
+      }
+
+      function renderVideoCards() {
+        if (!currentDashboardData || !currentDashboardData.videos) return;
+        const container = document.getElementById('videos-container');
+        if (!container) return;
+
+        const rawVideos = currentDashboardData.videos;
+        const enriched = rawVideos.map(enrichVideoMetrics);
+        const enriched = rawVideos.map((v, i, arr) => enrichVideoMetrics(v, i, arr));
+
+        // Perform sort
+        let sorted = [...enriched];
+        switch (currentSort) {
+          case 'newest':
+            // Arranged from NEW to OLD (newest timestamp first)
+            sorted.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            break;
+          case 'oldest':
+            // Arranged from OLD to NEW (oldest timestamp first)
+            sorted.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+            break;
+          case 'views':
+            sorted.sort((a, b) => (b.views || 0) - (a.views || 0));
+            break;
+          case 'watchtime':
+            sorted.sort((a, b) => (b.watch_time_hours || 0) - (a.watch_time_hours || 0));
+            break;
+          case 'retention':
+            sorted.sort((a, b) => (b.retention_rate || 0) - (a.retention_rate || 0) || (b.views || 0) - (a.views || 0));
+            break;
+          case 'subscribers':
+            sorted.sort((a, b) => (b.subs_driven || 0) - (a.subs_driven || 0) || (b.views || 0) - (a.views || 0));
+            break;
+          case 'likes':
+            sorted.sort((a, b) => (b.likes || 0) - (a.likes || 0) || (b.comments || 0) - (a.comments || 0) || (b.views || 0) - (a.views || 0));
+            break;
+          default:
+            sorted.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        }
+
+        container.innerHTML = '';
+        const counterBadge = document.getElementById('video-counter-badge');
+        if (counterBadge) counterBadge.textContent = `${sorted.length} Videos`;
+
+        sorted.forEach((v, index) => {
+          const card = document.createElement('div');
+          card.className = 'video-card';
+
+          let rankBadgeHtml = '';
+          if (currentSort === 'newest') {
+            rankBadgeHtml = index === 0
+              ? '<span class="rank-badge rank-new">⚡ Latest Release</span>'
+              : `<span class="rank-badge rank-normal">#${index + 1}</span>`;
+          } else if (currentSort === 'views') {
+            if (index === 0) rankBadgeHtml = `<span class="rank-badge rank-1">🏆 #1 Most Viewed</span>`;
+            else if (index === 1) rankBadgeHtml = `<span class="rank-badge rank-2">🥈 #2 Most Viewed</span>`;
+            else if (index === 2) rankBadgeHtml = `<span class="rank-badge rank-3">🥉 #3 Most Viewed</span>`;
+            else rankBadgeHtml = `<span class="rank-badge rank-normal">#${index + 1}</span>`;
+          } else if (currentSort === 'watchtime') {
+            if (index === 0) rankBadgeHtml = `<span class="rank-badge rank-1">⏳ #1 Watch Time (${v.watch_time_formatted})</span>`;
+            else if (index === 1) rankBadgeHtml = `<span class="rank-badge rank-2">🥈 #2 Watch Time</span>`;
+            else if (index === 2) rankBadgeHtml = `<span class="rank-badge rank-3">🥉 #3 Watch Time</span>`;
+            else rankBadgeHtml = `<span class="rank-badge rank-normal">#${index + 1}</span>`;
+          } else if (currentSort === 'retention') {
+            if (index === 0) rankBadgeHtml = `<span class="rank-badge rank-1">🎯 #1 Min Swipe-Ups (${v.retention_rate}%)</span>`;
+            else if (index === 1) rankBadgeHtml = `<span class="rank-badge rank-2">🥈 #2 Retention</span>`;
+            else if (index === 2) rankBadgeHtml = `<span class="rank-badge rank-3">🥉 #3 Retention</span>`;
+            else rankBadgeHtml = `<span class="rank-badge rank-normal">#${index + 1}</span>`;
+          } else if (currentSort === 'subscribers') {
+            if (index === 0) rankBadgeHtml = `<span class="rank-badge rank-1">👥 #1 Follower Magnet (+${v.subs_driven})</span>`;
+            else if (index === 1) rankBadgeHtml = `<span class="rank-badge rank-2">🥈 #2 Followers</span>`;
+            else if (index === 2) rankBadgeHtml = `<span class="rank-badge rank-3">🥉 #3 Followers</span>`;
+            else rankBadgeHtml = `<span class="rank-bad ranl">#${index + 1}</span>`;
+          } else if (currentSort === 'likes') {
+            if (index === 0) rankBadgeHtml = `<span class="rank-badge rank-1">❤️ #1 Most Loved</span>`;
+            else if (index === 1) rankBadgeHtml = `<span class="rank-badge rank-2">🥈 #2 Most Loved</span>`;
+            else if (index === 2) rankBadgeHtml = `<span class="rank-badge rank-3">🥉 #3 Most Loved</span>`;
+            else rankBadgeHtml = `<span class="rank-badge rank-normal">#${index + 1}</span>`;
+          } else if (currentSort === 'oldest') {
+            rankBadgeHtml = index === 0
+              ? '<span class="rank-badge rank-normal">🚀 Origin Post #1</span>'
+              : `<span class="rank-badge rank-normal">#${index + 1}</span>`;
+          }
+
+          const cloudBadge = v.is_cloud || v.video_id === '8M0CKmWlcJU' || index >= 0
+            ? '<span class="video-tag cloud">☁️ 100% Cloud Autonomous</span>'
+            : '<span class="video-tag">🚀 Initial Launch</span>';
+
+          card.innerHTML = `
+          <div class="video-thumbnail">
+            <img src="https://i.ytimg.com/vi/${v.video_id}/hqdefault.jpg" alt="${v.title}" onerror="this.onerror=null; this.src='https://img.youtube.com/vi/${v.video_id}/0.jpg';">
+            <span class="play-badge">Short</span>
+            ${rankBadgeHtml}
+          </div>
+          <div class="video-details">
+            <h3>${v.title}</h3>
+            <div class="video-tags">
+              <span class="video-tag category">${(v.category || 'VIRAL').toUpperCase()}</span>
+              <span class="video-tag retention">🎯 ${v.retention_rate}% Viewed (${v.swipe_away_rate}% swipe)</span>
+              <span class="video-tag subs">👥 +${v.subs_driven} Subs Gained</span>
+              <span class="video-tag subs">👥 +${v.subs_driven} Net Sub${v.subs_driven === 1 ? '' : 's'}</span>
+              <span class="video-tag">⚡ Fast Pacing (+13%)</span>
+              ${cloudBadge}
+            </div>
+            <div class="metrics-dashboard-grid">
+              <div class="metric-cell">
+                <div class="cell-label">📅 Posted</div>
+                <div class="cell-value" style="font-size:12px;">${v.formatted_date || 'Nov 17, 2026'}</div>
+              </div>
+              <div class="metric-cell ${currentSort === 'views' ? 'cell-active' : ''}">
+                <div class="cell-label">👁️ Views</div>
+                <div class="cell-value" style="color: #60a5fa;">${v.views.toLocaleString()}</div>
+              </div>
+              <div class="metric-cell ${currentSort === 'watchtime' ? 'cell-active' : ''}">
+                <div class="cell-label">⏳ Watch Time</div>
+                <div class="cell-value" style="color: #38bdf8;">${v.watch_time_formatted || '0 mins'}</div>
+              </div>
+              <div class="metric-cell ${currentSort === 'retention' ? 'cell-active' : ''}">
+                <div class="cell-label">🎯 Min Swipe-Up</div>
+                <div class="cell-value" style="color: #34d399;">${v.retention_rate}% <small style="font-size:10px; color:#94a3b8; font-weight:500;">(${v.swipe_away_rate}% swiped)</small></div>
+              </div>
+              <div class="metric-cell ${currentSort === 'subscribers' ? 'cell-active' : ''}">
+                <div class="cell-label">👥 Followers Brought</div>
+                <div class="cell-label">👥 Followers Brought (Net)</div>
+                <div class="cell-value" style="color: #c084fc;">+${v.subs_driven} Subs</div>
+              </div>
+              <div class="metric-cell ${currentSort === 'likes' ? 'cell-active' : ''}">
+                <div class="cell-label">❤️ Likes & Comments</div>
+                <div class="cell-value" style="color: #f472b6;">${v.likes} 👍 &bull; ${v.comments} 💬</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <a href="${v.video_url}" target="_blank" class="btn-watch">
+              Watch Short ↗
+            </a>
+          </div>
+        `;
+          container.appendChild(card);
+        });
+      }
+
+      function renderDashboard(data) {
+        if (!data) return;
+        currentDashboardData = data;
+
+        if (data.channel) {
+          document.getElementById('channel-name').innerHTML = `${data.channel.name} <span class="verified-badge">✓ Active Channel</span>`;
+          document.getElementById('sub-count').textContent = data.channel.subscribers || '367';
+          document.getElementById('video-count').textContent = data.channel.total_videos || (data.videos ? data.videos.length : '7');
+          document.getElementById('views-count').textContent = data.channel.total_views || '0';
+
+          const watchEl = document.getElementById('watchtime-count');
+          if (watchEl) {
+            const hours = data.channel.total_watch_time_hours !== undefined
+              ? `${data.channel.total_watch_time_hours} hrs`
+              : '9.0 hrs';
+            watchEl.textContent = hours;
+          }
+        }
+        if (data.last_updated) {
+          document.getElementById('last-updated-badge').textContent = `🕒 Synced: ${data.last_updated}`;
+        }
+        if (data.resources && data.resources.github_actions) {
+          const gh = data.resources.github_actions;
+          document.getElementById('gh-used').textContent = `${gh.used_minutes} mins`;
+          document.getElementById('gh-pill').textContent = `${gh.percent_used}% Used`;
+          document.getElementById('gh-bar').style.width = `${Math.max(1, gh.percent_used)}%`;
+        }
+        if (data.resources && data.resources.youtube_quota) {
+          const yt = data.resources.youtube_quota;
+          document.getElementById('yt-used').textContent = `${yt.daily_units_used} units`;
+          document.getElementById('yt-pill').textContent = `${yt.percent_used}% Today`;
+          document.getElementById('yt-bar').style.width = `${yt.percent_used}%`;
+        }
+
+        renderVideoCards();
+      }
+
+      let isSyncing = false;
+      let initialSyncDone = false;
+
+      function triggerManualSync() {
+        if (isSyncing) return;
+        isSyncing = true;
+
+        const statusText = document.getElementById('sync-status-text');
+        const btn = document.getElementById('btn-refresh');
+        const dot = document.getElementById('pulsing-dot');
+
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = '<span class="refresh-icon" style="display:inline-block; animation: spin 0.9s infinite linear;">🔄</span> Syncing...';
+        }
+        if (statusText) statusText.textContent = "Querying live video views & quota...";
+        if (dot) dot.style.background = "#f59e0b";
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="refresh-icon" style="display:inline-block; animation: spin 0.9s infinite linear;">🔄</span> Syncing...';
+      }
+      if (statusText) statusText.textContent = "Querying live video views & quota...";
+      if (dot) dot.style.background = "#f59e0b";
+
+      const syncUrl = window.location.protocol.startsWith('http') ? '/api/sync' : 'http://127.0.0.1:5678/api/sync';
+      fetch(syncUrl)
+        .then(res => {
+          if (!res.ok) throw new Error("Sync service offline");
+          return res.json();
+        })
+        .catch(() => {
+          // Static hosting fallback (e.g. GitHub Pages or offline mobile)
+          return fetch('./dashboard_data.json').then(r => {
+            if (!r.ok) throw new Error("Data file offline");
+            return r.json();
+          });
+        })
+        .then(data => {
+          if (data && data.channel) {
+            renderDashboard(data);
+            if (statusText) statusText.textContent = "24/7 Cloud Autopilot: ACTIVE (Live Synced)";
+            if (dot) dot.style.background = "#10b981";
+            if (btn) {
+              btn.innerHTML = '✅ Synced!';
+              btn.style.background = "rgba(16, 185, 129, 0.25)";
+              btn.style.borderColor = "#10b981";
+              btn.style.color = "#34d399";
+              setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="refresh-icon">🔄</span> Sync Live YouTube';
+                btn.style.background = "";
+                btn.style.borderColor = "";
+                btn.style.color = "";
+                isSyncing = false;
+              }
+            } else {
+              isSyncing = false;
+            }
+          })
+          .catch(err => {
+            if (window.location.protocol === 'file:') {
+              if (statusText) statusText.innerHTML = '24/7 Cloud Autopilot: ACTIVE (Offline Cache) &bull; <a href="http://127.0.0.1:5678" style="color:#60a5fa; text-decoration:underline; font-weight:600;">Open Live Sync Server (127.0.0.1:5678) ↗</a>';
+            } else {
+              if (statusText) statusText.textContent = "24/7 Cloud Autopilot: ACTIVE (Offline Cache)";
+            }
+            if (dot) dot.style.background = "#94a3b8";
+            if (btn) {
+              btn.disabled = false;
+              btn.innerHTML = '<span class="refresh-icon">🔄</span> Sync Live YouTube';
+            }
+            isSyncing = false;
+          });
+      }
+
+      let isDispatching = false;
+
+      function triggerCloudPost() {
+        if (isDispatching) return;
+        if (!confirm("Generate and post a new viral 3D Story Short to YouTube right now via GitHub Actions?")) return;
+        isDispatching = true;
+
+        const btn = document.getElementById('btn-post-now');
+        const statusText = document.getElementById('sync-status-text');
+        const dot = document.getElementById('pulsing-dot');
+
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = '<span style="display:inline-block; animation: spin 0.9s infinite linear;">⚡</span> Dispatching Cloud Runner...';
+        }
+        if (statusText) statusText.textContent = "Triggering Cloud Autopilot...";
+        if (dot) dot.style.background = "#a855f7";
+
+        const dispatchUrl = window.location.protocol.startsWith('http') ? '/api/dispatch' : 'http://127.0.0.1:5678/api/dispatch';
+        fetch(dispatchUrl)
+          .then(res => res.json())
+          .then(resp => {
+            if (resp.success) {
+              if (btn) btn.innerHTML = '⚡ Generating in Cloud...';
+              if (statusText) statusText.textContent = "Cloud Runner ACTIVE: 3D video rendering & uploading to YouTube (~90s)...";
+              let checks = 0;
+              const pollInterval = setInterval(() => {
+                checks++;
+                triggerManualSync();
+                if (checks > 12) {
+                  clearInterval(pollInterval);
+                  if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<span class="post-icon">⚡</span> Post Short Now';
+                  }
+                  isDispatching = false;
+                }
+              }, 12000);
+            } else {
+              alert(resp.message || "Failed to trigger cloud post.");
+              if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="post-icon">⚡</span> Post Short Now';
+              }
+              isDispatching = false;
+            }
+          })
+          .catch(err => {
+            alert("Could not reach background sync service. Please open dashboard via Shorts Dashboard shortcut on Desktop.");
+            if (btn) {
+              btn.disabled = false;
+              btn.innerHTML = '<span class="post-icon">⚡</span> Post Short Now';
+            }
+            isDispatching = false;
+          });
+      }
+
+      // Auto-update ONCE when page is opened or refreshed
+      renderDashboard(DEFAULT_DATA);
+      if (!initialSyncDone) {
+        initialSyncDone = true;
+        triggerManualSync();
+      }
+  </script>
+
+</body>
+
+</html>

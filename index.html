@@ -937,133 +937,208 @@
           "note": "You used 1          f 10,000 daily free units           ost up to 6 shorts/day fo          )"
     // Standalone default data (so the dashboard works instantly even when opened as a local file with no server)
     const DEFAULT_DATA = {
-            "channel": {
-              "name": "Short Cliper",
-              "subscribers": 368,
-              "total_videos": 7,
-              "total_views": 1270
-            },
-            "resources": {
-              "monthly_cost": "$0.00 FOREVER",
-              "github_actions": {
-                "used_minutes": 8.4,
-                "total_minutes": 2000,
-                "remaining_minutes": 1991.6,
-                "percent_used": 0.42,
-                "note": "0.42% used of your 2,000 free monthly cloud minutes"
-              },
-              "edge_tts": {
-                "status": "          ree & Unlimited",
-                "co          $0.00"
+  "channel": {
+    "name": "Short Cliper",
+    "subscribers": 368,
+    "total_videos": 10,
+    "total_views": 2842,
+    "total_watch_time_hours": 28.8
+  },
+  "resources": {
+    "monthly_cost": "$0.00 FOREVER",
+    "github_actions": {
+      "used_minutes": 12.0,
+      "total_minutes": 2000,
+      "remaining_minutes": 1988.0,
+      "percent_used": 0.6,
+      "note": "0.6% used of your 2,000 free monthly cloud minutes"
+    },
+    "youtube_quota": {
+      "daily_units_used": 16000,
+      "daily_units_total": 10000,
+      "percent_used": 160.0,
+      "max_free_uploads_per_day": 6,
+      "note": "You used 16000 of 10,000 daily free units (can post up to 6 shorts/day for free)"
+    },
+    "edge_tts": {
+      "status": "100% Free & Unlimited",
+      "cost": "$0.00"
     }
-            },
-            "videos": [
-              {
-                "title": "The I          ble Coinciden          the King \ud          c51 #shorts",
-                category": "mindbende                   ti          p": 1794918624,
-      "formatted_date": "Nov 17, 2026 - 06:00 P              "video_id": "ahcVT_,
-                "video_url": "htt          ww.youtube.com/shorts/ahcVT_FqwV0",
-                "vi          29,
+  },
+  "videos": [
+    {
+      "title": "The Impossible Coincidence of the King \ud83d\udc51 #shorts",
+      "category": "mindbender",
+      "timestamp": 1794918624,
+      "formatted_date": "Nov 17, 2026 - 06:00 PM",
+      "video_id": "ahcVT_FqwV0",
+      "video_url": "https://www.youtube.com/shorts/ahcVT_FqwV0",
+      "views": 44,
       "likes": 0,
-                ents": 0,
-      "watch_time_hours": 0.25,
-                "watch_time          tted": "15 min              "retenti          e": 73.4,
-               e_away_rate": 26.6,
-          "s        dr           1,
+      "comments": 0,
+      "watch_time_hours": 0.38,
+      "watch_time_formatted": "23 mins",
+      "retention_rate": 73.8,
+      "swipe_away_rate": 26.2,
+      "subs_driven": 1,
       "status": "uploaded"
-              },
-              {
-                "title": "The City Th          ced to Death \ud83d\udc          orts",
-                "category": ry",
+    },
+    {
+      "title": "The City That Danced to Death \ud83d\udc83 #shorts",
+      "category": "history",
       "timestamp": 1794926781,
-                "fo          d_date": "Nov 17, 2026 - 08          ",
-                "video_id": "8M0CKmWlcJU",
-                "video_url": "htt          ww.youtube.c          rts/8M0CKmWl                "views":                "likes": 0,
-            omm        ":              "watch_time_hours": 1.66,
-      "watch_time_formatted": "1.7 hrs             "retention_rate": 7               "swipe_away_rate": 2               "subs_driven": 3,
-      "status": "uploa             },
+      "formatted_date": "Nov 17, 2026 - 08:16 PM",
+      "video_id": "8M0CKmWlcJU",
+      "video_url": "https://www.youtube.com/shorts/8M0CKmWlcJU",
+      "views": 219,
+      "likes": 0,
+      "comments": 0,
+      "watch_time_hours": 2.02,
+      "watch_time_formatted": "2.0 hrs",
+      "retention_rate": 79.1,
+      "swipe_away_rate": 20.9,
+      "subs_driven": 4,
+      "status": "uploaded"
+    },
     {
-                  "title": an Who Survived Two Atomic Bombs \u2622\ufe0f #shorts",
-             tegory": "hist                "times           1795021154,
-            ormatted_date": "Nov         202        10          ",
+      "title": "The Man Who Survived Two Atomic Bombs \u2622\ufe0f #shorts",
+      "category": "history",
+      "timestamp": 1795021154,
+      "formatted_date": "Nov 18, 2026 - 10:29 PM",
       "video_id": "8WNkG6HNf84",
-                  "video_url": "https://www.youtube.          orts/8WNkG6HNf84",
-                  ws": 2,
-      "likes": 0, "comments": 0,
-                  "watch_time_hours": 0.0             "watch_time_formatted": s",
+      "video_url": "https://www.youtube.com/shorts/8WNkG6HNf84",
+      "views": 2,
+      "likes": 0,
+      "comments": 0,
+      "watch_time_hours": 0.02,
+      "watch_time_formatted": "1 mins",
       "retention_rate": 72.6,
-                  "swipe_away_rate": "subs_dr           0,
-      "s          : "uploaded"
-               {
-                    "title": "        $2         io          et Behind GTA 6 \ud83c\udfae #shorts",
-                    "category": "gaming",
-                    "timesta          795022241,
-      "for          _date": "Nov 18, 2026 - 1          M",
-                    "video_id": "UcjSiVcZ-fA",
-                    "v          rl": "https://www.youtube.c          rts/UcjSiVcZ-fA",
-                    "views": 239,
-                    "likes": 0,
-                    mments": 0,
-          "watch_time_          : 2.22,
-      "          time_formatted": "2.2        ", "retention_rate": 79.7,
-                    "swipe_away_r    ate": 20.3,
-                    "subs_driven": 4,
-                    "status": "uploaded"
-                  },
+      "swipe_away_rate": 27.4,
+      "subs_driven": 0,
+      "status": "uploaded"
+    },
     {
-                "title": "The Terrifying Dark Forest Theory of Space \ud83c\udf32 #shorts",
-                "category": "science",
-                "timestamp": 1795022360,
-                "formatted_date": "Nov 18, 2026 - 10:49 PM",
-                "video_id": "H2I1XTsZcTA",
-                "video_url": "https://www.youtube.com/shorts/H2I1XTsZcTA",
-                "views": 500,
-                "likes": 0,
-                "comments": 0,
-                "watch_time_hours": 5.1,
-                "watch_time_formatted": "5.1 hrs",
-                "retention_rate": 87.5,
-                "swipe_away_rate": 12.5,
-                "subs_driven": 9,
-                "status": "uploaded"
-              },
-              {
-                "title": "My Landlord Tried to Evict Me Over an Air Fryer \ud83c\udf5f #shorts",
-                "category": "story",
-                "timestamp": 1795035935,
-                "formatted_date": "Nov 19, 2026 - 02:35 AM",
-                "video_id": "EPWx9FaCR_U",
-                "video_url": "https://www.youtube.com/shorts/EPWx9FaCR_U",
-                "views": 1,
-                "likes": 0,
-                "comments": 0,
-                "watch_time_hours": 0.01,
-                "watch_time_formatted": "1 mins",
-                "retention_rate": 72.5,
-                "swipe_away_rate": 27.5,
-                "subs_driven": 0,
-                "status": "uploaded"
-              },
-              {
-                "title": "They Named Me 'Nobody' in a World Where Names Are Law \ud83c\udfad #shorts",
-                "category": "story",
-                "timestamp": 1795038250,
-                "formatted_date": "Nov 19, 2026 - 03:14 AM",
-                "video_id": "Ot88Eozavq0",
-                "video_url": "https://www.youtube.com/shorts/Ot88Eozavq0",
-                "views": 16,
-                "likes": 0,
-                "comments": 0,
-                "watch_time_hours": 0.14,
-                "watch_time_formatted": "8 mins",
-                "retention_rate": 73.0,
-                "swipe_away_rate": 27.0,
-                "subs_driven": 0,
-                "status": "uploaded"
-              }
-            ],
-            "last_updated": "Nov 19, 2026 at 03:20 AM"
-          };
+      "title": "The $2 Billion Secret Behind GTA 6 \ud83c\udfae #shorts",
+      "category": "gaming",
+      "timestamp": 1795022241,
+      "formatted_date": "Nov 18, 2026 - 10:47 PM",
+      "video_id": "UcjSiVcZ-fA",
+      "video_url": "https://www.youtube.com/shorts/UcjSiVcZ-fA",
+      "views": 420,
+      "likes": 0,
+      "comments": 0,
+      "watch_time_hours": 4.17,
+      "watch_time_formatted": "4.2 hrs",
+      "retention_rate": 85.1,
+      "swipe_away_rate": 14.9,
+      "subs_driven": 8,
+      "status": "uploaded"
+    },
+    {
+      "title": "The Terrifying Dark Forest Theory of Space \ud83c\udf32 #shorts",
+      "category": "science",
+      "timestamp": 1795022360,
+      "formatted_date": "Nov 18, 2026 - 10:49 PM",
+      "video_id": "H2I1XTsZcTA",
+      "video_url": "https://www.youtube.com/shorts/H2I1XTsZcTA",
+      "views": 888,
+      "likes": 0,
+      "comments": 0,
+      "watch_time_hours": 9.17,
+      "watch_time_formatted": "9.2 hrs",
+      "retention_rate": 88.5,
+      "swipe_away_rate": 11.5,
+      "subs_driven": 16,
+      "status": "uploaded"
+    },
+    {
+      "title": "My Landlord Tried to Evict Me Over an Air Fryer \ud83c\udf5f #shorts",
+      "category": "story",
+      "timestamp": 1795035935,
+      "formatted_date": "Nov 19, 2026 - 02:35 AM",
+      "video_id": "EPWx9FaCR_U",
+      "video_url": "https://www.youtube.com/shorts/EPWx9FaCR_U",
+      "views": 40,
+      "likes": 0,
+      "comments": 0,
+      "watch_time_hours": 0.34,
+      "watch_time_formatted": "21 mins",
+      "retention_rate": 73.7,
+      "swipe_away_rate": 26.3,
+      "subs_driven": 1,
+      "status": "uploaded"
+    },
+    {
+      "title": "They Named Me 'Nobody' in a World Where Names Are Law \ud83c\udfad #shorts",
+      "category": "story",
+      "timestamp": 1795038250,
+      "formatted_date": "Nov 19, 2026 - 03:14 AM",
+      "video_id": "Ot88Eozavq0",
+      "video_url": "https://www.youtube.com/shorts/Ot88Eozavq0",
+      "views": 1225,
+      "likes": 0,
+      "comments": 0,
+      "watch_time_hours": 12.65,
+      "watch_time_formatted": "12.7 hrs",
+      "retention_rate": 88.5,
+      "swipe_away_rate": 11.5,
+      "subs_driven": 22,
+      "status": "uploaded"
+    },
+    {
+      "title": "Sister Tried to Steal My Wedding Dress \ud83d\udc70 #shorts",
+      "category": "story",
+      "timestamp": 1795055822,
+      "formatted_date": "Nov 19, 2026 - 08:07 AM",
+      "video_id": "YZ7lTfFE25Q",
+      "video_url": "https://www.youtube.com/shorts/YZ7lTfFE25Q",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "watch_time_hours": 0.01,
+      "watch_time_formatted": "1 mins",
+      "retention_rate": 72.5,
+      "swipe_away_rate": 27.5,
+      "subs_driven": 0,
+      "status": "uploaded"
+    },
+    {
+      "title": "Customer Snapped His Fingers at Me \ud83c\udf7d\ufe0f #shorts",
+      "category": "story",
+      "timestamp": 1795077626,
+      "formatted_date": "Nov 19, 2026 - 02:10 PM",
+      "video_id": "ZVkELb1BBfo",
+      "video_url": "https://www.youtube.com/shorts/ZVkELb1BBfo",
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "watch_time_hours": 0.01,
+      "watch_time_formatted": "1 mins",
+      "retention_rate": 72.5,
+      "swipe_away_rate": 27.5,
+      "subs_driven": 0,
+      "status": "uploaded"
+    },
+    {
+      "title": "Karen Demanded My First-Class Seat \u2708\ufe0f #shorts",
+      "category": "story",
+      "timestamp": 1795085172,
+      "formatted_date": "Nov 19, 2026 - 04:16 PM",
+      "video_id": "3u4kN1LYXa8",
+      "video_url": "https://www.youtube.com/shorts/3u4kN1LYXa8",
+      "views": 2,
+      "likes": 0,
+      "comments": 0,
+      "watch_time_hours": 0.02,
+      "watch_time_formatted": "1 mins",
+      "retention_rate": 72.6,
+      "swipe_away_rate": 27.4,
+      "subs_driven": 0,
+      "status": "uploaded"
+    }
+  ],
+  "last_updated": "Nov 19, 2026 at 07:27 PM"
+};
 
     let currentDashboardData = DEFAULT_DATA;
     let currentSort = 'newest'; // Arranged from NEW to OLD by default!
@@ -1354,22 +1429,15 @@
         if (statusText) statusText.textContent = "Querying live video views & quota...";
         if (dot) dot.style.background = "#f59e0b";
 
-      if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = '<span class="refresh-icon" style="display:inline-block; animation: spin 0.9s infinite linear;">🔄</span> Syncing...';
-      }
-      if (statusText) statusText.textContent = "Querying live video views & quota...";
-      if (dot) dot.style.background = "#f59e0b";
-
       const syncUrl = window.location.protocol.startsWith('http') ? '/api/sync' : 'http://127.0.0.1:5678/api/sync';
-      fetch(syncUrl)
+      fetch(syncUrl, { cache: 'no-store' })
         .then(res => {
           if (!res.ok) throw new Error("Sync service offline");
           return res.json();
         })
         .catch(() => {
           // Static hosting fallback (e.g. GitHub Pages or offline mobile)
-          return fetch('./dashboard_data.json').then(r => {
+          return fetch('./dashboard_data.json?t=' + Date.now(), { cache: 'no-store' }).then(r => {
             if (!r.ok) throw new Error("Data file offline");
             return r.json();
           });
@@ -1474,6 +1542,14 @@
         initialSyncDone = true;
         triggerManualSync();
       }
+  
+    // Auto-sync whenever user opens or switches back to this tab/app on phone
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        triggerManualSync();
+      }
+    });
+
   </script>
 
 </body>
